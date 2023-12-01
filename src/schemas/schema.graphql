@@ -8,6 +8,11 @@ type sellerUploadCountPayload {
   sellerName: String
   productCount: Float
 }
+type ordersStatusReportPayload {
+  sellerId: String
+  storeName: String
+  productCount: Float
+}
 type Query {
   sellerOrderCount(
     skip: Int = 0
@@ -21,4 +26,11 @@ type Query {
     startDate: DateTime
     endDate: DateTime
   ): [sellerUploadCountPayload]
+  ordersStatusReport(
+    skip: Int = 0
+    limit: Int = 20
+    startDate: DateTime
+    endDate: DateTime
+    orderStatus: subOrderStatus
+  ): [ordersStatusReportPayload]
 }
