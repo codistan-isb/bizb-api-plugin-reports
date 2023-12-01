@@ -1,6 +1,6 @@
 {
   "name": "@codistan-isb/bizb-api-plugin-reports",
-  "description": "Boilerplate Example plugin for the Reaction API",
+  "description": "Reaction plugin for bizb reports",
   "label": "Example Plugin",
   "version": "0.0.1",
   "main": "index.js",
