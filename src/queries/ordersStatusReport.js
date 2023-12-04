@@ -1,7 +1,7 @@
 
 export default async function ordersStatusReport(parent, args, context, info) {
     // console.log("sellerOrderCount query args", args);
-    let { startDate, endDate, skip, limit, orderStatus } = args;
+    let { startDate, endDate, skip, limit, orderStatus, byStores, byProduct } = args;
     let { collections } = context
     let { SubOrders } = collections;
     let match = {};
@@ -14,6 +14,13 @@ export default async function ordersStatusReport(parent, args, context, info) {
     if (orderStatus) {
         match['shipping.items.workflow.status'] = orderStatus.toLowerCase().replace(/_/g, '');
     }
+    if (byStores) {
+        match['shipping.items.sellerId'] = byStores;
+    }
+    if (byProduct) {
+        match['shipping.items.productId'] = byProduct;
+    }
+    console.log("match", match);
     let ordersStatusReportPipeline = [
         // {
         //     $match: {
