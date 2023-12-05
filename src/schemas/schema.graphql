@@ -8,6 +8,20 @@ type sellerUploadCountPayload {
   sellerName: String
   productCount: Float
 }
+
+type uploadedProductsMonthlyPayload {
+  totalcount: Int
+  product: [Product]
+}
+type sellerRegistraionMonthlyPayload {
+  totalcount: Int
+  seller: [Account]
+}
+type soldProductsMonthlyPayload {
+   totalcount: Int
+  product: [Product]
+}
+
 type Query {
   sellerOrderCount(
     skip: Int = 0
@@ -21,4 +35,25 @@ type Query {
     startDate: DateTime
     endDate: DateTime
   ): [sellerUploadCountPayload]
+
+   uploadedProductsMonthly(
+    skip: Int = 0
+    limit: Int = 20
+    startDate: DateTime
+    endDate: DateTime
+  ): uploadedProductsMonthlyPayload
+
+   sellerRegistraionMonthly(
+    skip: Int = 0
+    limit: Int = 20
+    startDate: DateTime
+    endDate: DateTime
+  ): sellerRegistraionMonthlyPayload
+
+  soldProductsMonthly(
+    skip: Int = 0
+    limit: Int = 20
+    startDate: DateTime
+    endDate: DateTime
+  ): soldProductsMonthlyPayload
 }
