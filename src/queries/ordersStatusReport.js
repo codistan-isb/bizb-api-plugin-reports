@@ -65,9 +65,9 @@ export default async function ordersStatusReport(parent, args, context, info) {
         { $skip: skip }, // Skip the already fetched records
         { $limit: limit }, // Fetch the next set of results
     ]
-    console.log("ordersStatusReportPipeline", ordersStatusReportPipeline);
+    // console.log("ordersStatusReportPipeline", ordersStatusReportPipeline);
     let ordersStatusReportResp = await SubOrders.aggregate(ordersStatusReportPipeline).toArray();
-    console.log("ordersStatusReportResp", ordersStatusReportResp);
+    // console.log("ordersStatusReportResp", ordersStatusReportResp);
     return ordersStatusReportResp;
 }
 
