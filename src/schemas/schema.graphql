@@ -58,6 +58,9 @@ type sellerPaymentPayload {
   itemId: String
   sellerId: String
 }
+type currentSellerSoldProductsCount {
+  totalSoldItems: Int
+}
 type Query {
   sellerOrderCount(
     skip: Int = 0
@@ -112,4 +115,8 @@ type Query {
     endDate: DateTime
     productId: String
   ): sellerPaymentsReportPayload
+
+  # seller dashboard apis
+  currentSellerSoldProducts: Int
+  currentSellerActiveProducts: Int
 }

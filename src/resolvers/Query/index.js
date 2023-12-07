@@ -5,6 +5,9 @@ import uploadedProductsMonthly from "./uploadedProductsMonthly.js";
 import sellerRegistraionMonthly from "./sellerRegistraionMonthly.js";
 import soldProductsMonthly from "./soldProductsMonthly.js";
 import sellerPaymentsReport from "./sellerPaymentsReport.js";
+import currentSellerSoldProducts from './currentSellerSoldProducts.js';
+import currentSellerActiveProducts from './currentSellerActiveProducts.js'
+
 export default {
     sellerOrderCount,
     sellerUploadCount,
@@ -12,5 +15,7 @@ export default {
     uploadedProductsMonthly,
     sellerRegistraionMonthly,
     soldProductsMonthly,
-    sellerPaymentsReport
+    sellerPaymentsReport,
+    currentSellerSoldProducts,
+    currentSellerActiveProducts
 }
