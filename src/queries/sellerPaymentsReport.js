@@ -20,7 +20,7 @@ export default async function sellerPaymentsReport(parent, args, context, info) 
     console.log("match", match);
     let total_count = await Payments.countDocuments(match);
     console.log("total_count", total_count);
-    let paymentRecord = await Payments.find(match).skip(skip).limit(limit).toArray()
+    let paymentRecord = await Payments.find(match).skip(skip).limit(limit).toArray();
     console.log("paymentRecord", paymentRecord);
     return {
         totalcount: total_count,

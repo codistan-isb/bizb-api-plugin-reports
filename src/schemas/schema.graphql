@@ -19,7 +19,7 @@ type sellerRegistraionMonthlyPayload {
 }
 type soldProductsMonthlyPayload {
   totalcount: Int
-  product: [Product]
+  soldProducts: [SimpleInventoryInfo]
 }
 
 type sellerOrderCountPayload {
@@ -86,21 +86,18 @@ type Query {
     startDate: DateTime
     endDate: DateTime
   ): [sellerUploadCountPayload]
-
   uploadedProductsMonthly(
     skip: Int = 0
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
   ): uploadedProductsMonthlyPayload
-
   sellerRegistraionMonthly(
     skip: Int = 0
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
   ): sellerRegistraionMonthlyPayload
-
   soldProductsMonthly(
     skip: Int = 0
     limit: Int = 20
