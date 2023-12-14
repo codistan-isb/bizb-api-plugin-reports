@@ -1,31 +1,29 @@
 
 export default async function soldProductsMonthly(parent, args, context, info) {
-    let { startDate, endDate, sold, skip, limit, } = args;
+    let { startDate, endDate, skip, limit, } = args;
     let { collections } = context
-    let { Products } = collections;
+    let { SimpleInventory } = collections;
 
-    // let uploadedProductsMonthly = await Products.find({}).toArray();
+    let match = {};
+    // match["inventoryInStock"]
+    match['inventoryInStock'] = 0;
+    if (startDate && endDate) {
+        match.updatedAt = {
+            $gte: startDate,
+            $lte: endDate
+        };
 
-    // console.log("uploadedProductsMonthly",startDate, endDate, skip, limit)
-
-    let query = {
-        "createdAt": {"$gte": startDate, "$lte": endDate},
-        "sold": sold  
     }
-
-    let total_count = await Products.count(query)
-
-    let soldProductsMonthly = await Products.find(query).skip(skip).limit(limit).toArray();
-
-    // cursor = collection.find(query).skip(skip).limit(limit)
-
-    // result = list(cursor)
+    let total_count = await SimpleInventory.count(match);
+    // console.log("total_count", total_count);
+    let soldProductsMonthly = await SimpleInventory.find(match).skip(skip).limit(limit).toArray();
+    // console.log("soldProductsMonthly", soldProductsMonthly);
 
     return {
-        totalcount: total_count ,
-        product : soldProductsMonthly
+        totalcount: total_count,
+        soldProducts: soldProductsMonthly
     };
-   
-    
+
+
 }
 
