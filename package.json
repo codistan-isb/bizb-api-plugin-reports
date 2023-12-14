@@ -2,7 +2,7 @@
   "name": "@codistan-isb/bizb-api-plugin-reports",
   "description": "Reaction plugin for bizb reports",
   "label": "bizb-api-plugin-reports",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "main": "index.js",
   "type": "module",
   "engines": {
