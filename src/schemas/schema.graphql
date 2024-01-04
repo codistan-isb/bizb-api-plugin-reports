@@ -1,12 +1,26 @@
-type sellerOrderCountPayload {
+type sellerOrderCountReturn {
   sellerId: String
   storeName: String
+  sellerLogo: String
+  sellerEmail: String
   orderCount: Float
+  sellerPhone: String
 }
-type sellerUploadCountPayload {
-  _id: String
-  sellerName: String
-  productCount: Float
+
+type returnToSellerProductsReturn {
+  sellerId: String
+  productId: String
+  product: Product
+}
+
+type returnToSellerProductsPayload {
+  totalcount: Int
+  returnToSellerProductsReturn: [returnToSellerProductsReturn]
+}
+
+type sellerOrderCountPayload {
+  totalcount: Int
+  sellerOrderCount: [sellerOrderCountReturn]
 }
 
 type uploadedProductsMonthlyPayload {
@@ -27,15 +41,32 @@ type sellerOrderCountPayload {
   storeName: String
   orderCount: Float
 }
-type sellerUploadCountPayload {
+type sellerUploadReturnCount {
   _id: String
+  sellerLogo: String
   sellerName: String
+  sellerEmail: String
   productCount: Float
+  sellerPhone: String
 }
-type ordersStatusReportPayload {
+
+type sellerUploadCountPayload {
+  totalcount: Int
+  sellerUploadProducts: [sellerUploadReturnCount]
+}
+
+type ordersStatusReportResp {
   sellerId: String
+  sellerLogo: String
+  sellerEmail: String
   storeName: String
   productCount: Float
+  sellerPhone: String
+}
+
+type ordersStatusReportPayload {
+  totalcount: Int
+  ordersStatusReport: [ordersStatusReportResp]
 }
 type sellerPaymentsReportPayload {
   totalcount: Int
@@ -49,15 +80,22 @@ type sellerPaymentPayload {
   # paymentReleasedDate: DateTime
   createdAt: String
   updatedAt: String
-  totalPrice: Int
-  fee: Int
-  amount: Int
+  totalPrice: Float
+  fee: Float
+  amount: Float
   subOrderId: String
   internalOrderId: String
   status: String
   itemId: String
-  sellerId: String
+  sellerInfo: Account
 }
+type sellerInfoPayload {
+  sellerId: String
+  sellerEmail: String
+  storeName: String
+  sellerPhone: String
+}
+
 type currentSellerSoldProductsCount {
   totalSoldItems: Int
 }
@@ -67,13 +105,22 @@ type Query {
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
-  ): [sellerOrderCountPayload]
-  sellerUploadCount(
+  ): sellerOrderCountPayload
+
+  returnToSellerProducts(
     skip: Int = 0
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
-  ): [sellerUploadCountPayload]
+  ): returnToSellerProductsPayload
+
+  # sellerUploadCount(
+  #   skip: Int = 0
+  #   limit: Int = 20
+  #   startDate: DateTime
+  #   endDate: DateTime
+  # ): [sellerUploadCountPayload]
+
   ordersStatusReport(
     skip: Int = 0
     limit: Int = 20
@@ -82,13 +129,15 @@ type Query {
     orderStatus: subOrderStatus
     byStores: String
     byProduct: String
-  ): [ordersStatusReportPayload]
+  ): ordersStatusReportPayload
+
   sellerUploadCount(
     skip: Int = 0
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
-  ): [sellerUploadCountPayload]
+  ): sellerUploadCountPayload
+
   uploadedProductsMonthly(
     skip: Int = 0
     limit: Int = 20
