@@ -11,6 +11,7 @@ import queries from "./queries/index.js";
  * @returns {undefined}
  */
 export default async function register(app) {
+  console.log("Bizb reposrts")
   await app.registerPlugin({
     label: pkg.label,
     name: pkg.name,
