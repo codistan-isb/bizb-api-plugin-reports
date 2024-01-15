@@ -8,6 +8,8 @@ import sellerPaymentsReport from "./sellerPaymentsReport.js";
 import currentSellerSoldProducts from './currentSellerSoldProducts.js';
 import currentSellerActiveProducts from './currentSellerActiveProducts.js'
 import returnToSellerProducts from "./returnToSellerProducts.js";
+import currentSellerUploadedProductMonthly from "./currentSellerUploadedProductMonthly.js";
+import currentSellerEarnings from "./currentSellerEarnings.js";
 
 export default {
     sellerOrderCount,
@@ -19,5 +21,7 @@ export default {
     sellerPaymentsReport,
     currentSellerSoldProducts,
     currentSellerActiveProducts,
-    returnToSellerProducts
+    returnToSellerProducts,
+    currentSellerUploadedProductMonthly,
+    currentSellerEarnings
 }
