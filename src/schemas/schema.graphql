@@ -187,7 +187,6 @@ type Query {
   currentSellerSoldProducts: Int
   currentSellerActiveProducts: Int
 
-
   #buyer side api
   sellerSoldProducts(
     userId: String
