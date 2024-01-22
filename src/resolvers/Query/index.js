@@ -23,7 +23,7 @@ export default {
     currentSellerSoldProducts,
     currentSellerActiveProducts,
     returnToSellerProducts,
-    sellerSoldProducts
+    sellerSoldProducts,
     currentSellerUploadedProductMonthly,
     currentSellerEarnings
 }
