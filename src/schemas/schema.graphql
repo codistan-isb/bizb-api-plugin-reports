@@ -111,6 +111,9 @@ type sellerInfoPayload {
 type currentSellerSoldProductsCount {
   totalSoldItems: Int
 }
+type currentSellerUploadedProductMonthly {
+  totalUploadedItems: Int
+}
 type Query {
   sellerOrderCount(
     skip: Int = 0
@@ -183,17 +186,4 @@ type Query {
   # seller dashboard apis
   currentSellerSoldProducts: Int
   currentSellerActiveProducts: Int
-
-  #buyer side api
-  sellerSoldProducts(
-    userId: String
-
-  ): sellerSoldProductsPayload
-
-}
-
-extend type Mutation{
-  getSellerToken(
-    userId: String
-  ): returnSellerTokenPayload
 }
