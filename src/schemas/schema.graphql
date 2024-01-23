@@ -180,12 +180,18 @@ type Query {
     productId: String
   ): sellerPaymentsReportPayload
   
-   
-
 
   # seller dashboard apis
   currentSellerSoldProducts: Int
   currentSellerActiveProducts: Int
+
+currentSellerUploadedProductMonthly(
+    startDate: DateTime
+    endDate: DateTime
+  ): currentSellerUploadedProductMonthly
+ 
+ 
+ currentSellerEarnings(startDate: DateTime, endDate: DateTime): Float
 
   #buyer side api
   sellerSoldProducts(
