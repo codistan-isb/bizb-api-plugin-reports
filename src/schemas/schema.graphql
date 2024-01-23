@@ -6,6 +6,11 @@ type sellerOrderCountReturn {
   orderCount: Float
   sellerPhone: String
 }
+ 
+type returnSellerTokenPayload {
+  accessToken: String
+  refreshToken: String
+}
 
 type returnToSellerProductsReturn {
   sellerId: String
@@ -35,6 +40,7 @@ type soldProductsMonthlyPayload {
   totalcount: Int
   soldProducts: [SimpleInventoryInfo]
 }
+
 
 type sellerOrderCountPayload {
   sellerId: String
@@ -89,6 +95,12 @@ type sellerPaymentPayload {
   itemId: String
   sellerInfo: Account
 }
+
+type sellerSoldProductsPayload {
+  totalSoldProductCount: Int
+}
+
+
 type sellerInfoPayload {
   sellerId: String
   sellerEmail: String
@@ -167,13 +179,30 @@ type Query {
     endDate: DateTime
     productId: String
   ): sellerPaymentsReportPayload
+  
 
   # seller dashboard apis
   currentSellerSoldProducts: Int
   currentSellerActiveProducts: Int
-  currentSellerUploadedProductMonthly(
+
+currentSellerUploadedProductMonthly(
     startDate: DateTime
     endDate: DateTime
   ): currentSellerUploadedProductMonthly
-  currentSellerEarnings(startDate: DateTime, endDate: DateTime): Float
+ 
+ 
+ currentSellerEarnings(startDate: DateTime, endDate: DateTime): Float
+
+  #buyer side api
+  sellerSoldProducts(
+    userId: String
+
+  ): sellerSoldProductsPayload
+
+}
+
+extend type Mutation{
+  getSellerToken(
+    userId: String
+  ): returnSellerTokenPayload
 }
