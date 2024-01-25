@@ -13,6 +13,9 @@ import currentSellerUploadedProductMonthly from "./currentSellerUploadedProductM
 import currentSellerEarnings from "./currentSellerEarnings.js";
 import sellerListedProduct from "./sellerListedProduct.js";
 import currentSellerSales from "./currentSellerSales.js";
+import sellerEarningBreakDown from "./sellerEarningBreakDown.js";
+import commissionDetails from "./commissionDetails.js";
+
 export default {
     sellerOrderCount,
     sellerUploadCount,
@@ -28,5 +31,7 @@ export default {
     currentSellerUploadedProductMonthly,
     currentSellerEarnings,
     sellerListedProduct,
-    currentSellerSales
+    currentSellerSales,
+    sellerEarningBreakDown,
+    commissionDetails
 }
