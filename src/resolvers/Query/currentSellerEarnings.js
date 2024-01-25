@@ -9,6 +9,7 @@ export default async function currentSellerEarnings(parent, args, context, info)
         throw new ReactionError("access-denied", "Access Denied");
     }
     const currentSellerUploadedProductMonthly = await context.queries.currentSellerEarnings(parent, args, context, info);
+    console.log("currentSellerUploadedProductMonthly", currentSellerUploadedProductMonthly);
     return currentSellerUploadedProductMonthly;
 }
 
