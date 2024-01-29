@@ -122,6 +122,17 @@ type currentSellerUploadedProductMonthly {
 type currentSellerEarningsPayload {
   totalEarnings: String
 }
+ type earningsBreakDownPayload {
+    totalRevenue: Float,
+    totalCommission: Float,
+    netProfit: Float
+  }
+
+  type commissionDetailsPayload {
+   orderId: String,
+      commissionFee: Float,
+      netProfit: Float,
+  }
 
 type Query {
   sellerOrderCount(
@@ -205,6 +216,8 @@ type Query {
   #buyer side api
   sellerSoldProducts(userId: String): sellerSoldProductsPayload
   sellerListedProduct: sellerListingPayload
+  sellerEarningBreakDown: earningsBreakDownPayload
+  commissionDetails: [commissionDetailsPayload]
 }
 
 extend type Mutation {
