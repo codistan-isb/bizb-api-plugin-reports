@@ -119,11 +119,15 @@ type currentSellerUploadedProductMonthly {
   totalUploadedItems: Int
 }
 
+type WeekData {
+  name: String
+  uv: Float
+  pv: Float
+  amt: Float
+}
+
 type currentSellerEarningsPayload {
-  week1Earnings: String
-  week2Earnings: String
-  week3Earnings: String
-  week4Earnings: String
+  weekData: [WeekData]
 }
  type earningsBreakDownPayload {
     totalRevenue: Float,
