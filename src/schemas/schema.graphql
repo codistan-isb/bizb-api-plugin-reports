@@ -105,11 +105,11 @@ type sellerInfoPayload {
   storeName: String
   sellerPhone: String
 }
-type sellerListingPayload{
+type sellerListingPayload {
   soldProduct: Int
   publishedProducts: Int
   unPublishedProducts: Int
-  ListedProduct: Int 
+  ListedProduct: Int
 }
 
 type currentSellerSoldProductsCount {
@@ -129,17 +129,22 @@ type WeekData {
 type currentSellerEarningsPayload {
   weekData: [WeekData]
 }
- type earningsBreakDownPayload {
-    totalRevenue: Float,
-    totalCommission: Float,
-    netProfit: Float
-  }
+type earningsBreakDownPayload {
+  totalRevenue: Float
+  totalCommission: Float
+  netProfit: Float
+}
 
-  type commissionDetailsPayload {
-   orderId: String,
-      commissionFee: Float,
-      netProfit: Float,
-  }
+type commissionDetailsPayload {
+  orderId: String
+  commissionFee: Float
+  netProfit: Float
+
+}
+type CommissionDetailsResponse {
+  totalCount: Int
+  commissionDetails: [commissionDetailsPayload]
+}
 
 type Query {
   sellerOrderCount(
@@ -215,16 +220,18 @@ type Query {
     startDate: DateTime
     endDate: DateTime
   ): currentSellerUploadedProductMonthly
- 
- 
- currentSellerEarnings(startDate: DateTime, endDate: DateTime): currentSellerEarningsPayload
- currentSellerSales: Float
+
+  currentSellerEarnings(
+    startDate: DateTime
+    endDate: DateTime
+  ): currentSellerEarningsPayload
+  currentSellerSales: Float
 
   #buyer side api
   sellerSoldProducts(userId: String): sellerSoldProductsPayload
   sellerListedProduct: sellerListingPayload
   sellerEarningBreakDown: earningsBreakDownPayload
-  commissionDetails: [commissionDetailsPayload]
+  commissionDetails: CommissionDetailsResponse
 }
 
 extend type Mutation {
