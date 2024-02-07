@@ -27,6 +27,7 @@ export default async function sellerListedProduct(parent, args, context, info) {
     const allPublishedProducts = await Catalog.find({
       "product.variants.uploadedBy.userId": _id,
       "product.isVisible": true,
+      "product.isDeleted": false,
     }).toArray();
     console.log("allPublishedProducts", allPublishedProducts.length);
 
@@ -34,8 +35,9 @@ export default async function sellerListedProduct(parent, args, context, info) {
     const unpublishedProductCount = await Catalog.find({
       "product.variants.uploadedBy.userId": _id,
       "product.isVisible": false,
+      "product.isDeleted": false,
     }).toArray();
-
+ console.log("unpublishedProductCount", unpublishedProductCount.length);
     // Step 6: Count listed products
     const listedProductCount =
       soldProducts.length +
@@ -49,6 +51,7 @@ export default async function sellerListedProduct(parent, args, context, info) {
       unPublishedProducts: unpublishedProductCount.length,
       ListedProduct: listedProductCount,
     };
+    console.log("sellerListedProduct", sellerListedProduct);
     return sellerListedProduct;
   } catch (error) {
     console.log("error", error);
