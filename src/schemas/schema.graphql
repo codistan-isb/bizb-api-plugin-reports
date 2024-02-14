@@ -139,11 +139,14 @@ type commissionDetailsPayload {
   orderId: String
   commissionFee: Float
   netProfit: Float
-
 }
 type CommissionDetailsResponse {
   totalCount: Int
   commissionDetails: [commissionDetailsPayload]
+}
+type ProductInsightsResponse {
+  productId: ID
+  viewCount: Int
 }
 
 type Query {
@@ -232,6 +235,7 @@ type Query {
   sellerListedProduct: sellerListingPayload
   sellerEarningBreakDown: earningsBreakDownPayload
   commissionDetails: CommissionDetailsResponse
+  productInsights: [ProductInsightsResponse]
 }
 
 extend type Mutation {

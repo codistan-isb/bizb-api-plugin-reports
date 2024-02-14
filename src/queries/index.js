@@ -15,6 +15,7 @@ import sellerListedProduct from "./sellerListedProduct.js";
 import currentSellerSales from "./currentSellerSales.js";
 import sellerEarningBreakDown from "./sellerEarningBreakDown.js";
 import commissionDetails from "./commissionDetails.js";
+import productInsights from "./productInsights.js";
 
 
 export default {
@@ -34,5 +35,6 @@ export default {
   sellerListedProduct,
   currentSellerSales,
   sellerEarningBreakDown,
-  commissionDetails
+  commissionDetails,
+  productInsights
 };
