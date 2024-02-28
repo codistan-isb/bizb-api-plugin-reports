@@ -16,6 +16,7 @@ import currentSellerSales from "./currentSellerSales.js";
 import sellerEarningBreakDown from "./sellerEarningBreakDown.js";
 import commissionDetails from "./commissionDetails.js";
 import productInsights from "./productInsights.js";
+import buyerReferalCode from "./buyerReferalCode.js";
 
 export default {
     sellerOrderCount,
@@ -35,5 +36,6 @@ export default {
     currentSellerSales,
     sellerEarningBreakDown,
     commissionDetails,
-    productInsights
+    productInsights,
+    buyerReferalCode
 }
