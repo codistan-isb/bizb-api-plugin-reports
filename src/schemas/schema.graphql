@@ -149,6 +149,11 @@ type ProductInsightsResponse {
   viewCount: Int
 }
 
+type buyerReferalUsage{
+  discountCode: String
+  Account: Account
+}
+
 type Query {
   sellerOrderCount(
     skip: Int = 0
@@ -236,6 +241,7 @@ type Query {
   sellerEarningBreakDown: earningsBreakDownPayload
   commissionDetails: CommissionDetailsResponse
   productInsights: [ProductInsightsResponse]
+  buyerReferalCode: [buyerReferalUsage]
 }
 
 extend type Mutation {
