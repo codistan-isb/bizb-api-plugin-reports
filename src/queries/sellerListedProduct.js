@@ -28,6 +28,7 @@ export default async function sellerListedProduct(parent, args, context, info) {
       "product.variants.uploadedBy.userId": _id,
       "product.isVisible": true,
       "product.isDeleted": false,
+      "product.isSoldOut": false,
     }).toArray();
     console.log("allPublishedProducts", allPublishedProducts.length);
 
@@ -36,6 +37,7 @@ export default async function sellerListedProduct(parent, args, context, info) {
       "product.variants.uploadedBy.userId": _id,
       "product.isVisible": false,
       "product.isDeleted": false,
+      "product.isSoldOut": false,
     }).toArray();
  console.log("unpublishedProductCount", unpublishedProductCount.length);
     // Step 6: Count listed products
