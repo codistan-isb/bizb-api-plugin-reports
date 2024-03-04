@@ -1,6 +1,6 @@
 export default async function ordersStatusReport(parent, args, context, info) {
   // console.log("sellerOrderCount query args", args);
-  let { startDate, endDate, skip, limit, orderStatus, byStores, byProduct } =
+  let { startDate, endDate, skip, limit, orderStatus, byStores, byProduct, byStoreName } =
     args;
   let { collections } = context;
   let { SubOrders } = collections;
@@ -21,6 +21,9 @@ export default async function ordersStatusReport(parent, args, context, info) {
   }
   if (byProduct) {
     match["shipping.items.productId"] = byProduct;
+  }
+  if (byStoreName) {
+    match["shipping.items.productVendor"] = byStoreName;
   }
   console.log("match", match);
   let ordersStatusReportPipeline = [

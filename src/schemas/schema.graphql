@@ -93,6 +93,7 @@ type sellerPaymentPayload {
   status: String
   itemId: String
   sellerInfo: Account
+  productName: String
 }
 
 type sellerSoldProductsPayload {
@@ -184,6 +185,7 @@ type Query {
     orderStatus: subOrderStatus
     byStores: String
     byProduct: String
+    byStoreName: String
   ): ordersStatusReportPayload
 
   sellerUploadCount(
@@ -218,6 +220,8 @@ type Query {
     startDate: DateTime
     endDate: DateTime
     productId: String
+    storeName: String
+    productName:String
   ): sellerPaymentsReportPayload
 
   # seller dashboard apis
