@@ -1,5 +1,5 @@
 export default async function sellerUploadCount(parent, args, context, info) {
-  let { startDate, endDate, skip, limit } = args;
+  let { startDate, endDate, skip, limit, storeName } = args;
   let { collections } = context;
   let { Products } = collections;
   let sellerUploadCountPipeline = [
@@ -51,6 +51,65 @@ export default async function sellerUploadCount(parent, args, context, info) {
     { $skip: skip }, // Skip the already fetched records
     { $limit: limit }, // Fetch the next set of results
   ];
+
+  if (storeName) {
+    console.log("Applying storeName filter:", storeName); // Log storeName
+    sellerUploadCountPipeline = [
+      {
+        $match: {
+          createdAt: {
+            $gte: startDate, // Start date
+            $lte: endDate, // End date
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "Accounts", // Replace with the actual name of the Accounts collection
+          localField: "sellerId",
+          foreignField: "_id",
+          as: "sellerDetails",
+        },
+      },
+      {
+        $unwind: "$sellerDetails", // Unwind the array created by $lookup
+      },
+      {
+        $match: {
+            "sellerDetails.storeName": storeName
+        }
+    },
+      {
+        $project: {
+          _id: 0, // Exclude the _id field if needed
+          sellerId: 1,
+          sellerLogo: "$sellerDetails.storeLogo",
+          sellerEmail: "$sellerDetails.emails",
+          sellerName: "$sellerDetails.storeName",
+          sellerPhone: "$sellerDetails.profile",
+          productCount: 1,
+        },
+      },
+      {
+        $unwind: "$sellerEmail", // Unwind the array created by $lookup
+        
+      },
+      {
+        $group: {
+          _id: "$sellerId",
+          sellerLogo: { $first: "$sellerLogo" },
+          sellerEmail: { $first: "$sellerEmail.address" },
+          sellerName: { $first: "$sellerName" },
+          productCount: { $sum: 1 },
+          sellerPhone: {$first:"$sellerPhone.phone"}
+  
+        },
+      },
+     
+      { $skip: skip }, // Skip the already fetched records
+      { $limit: limit }, // Fetch the next set of results
+    ];
+}
   // let totalcount = await Products.countDocuments(sellerUploadCountPipeline)
   // Remove $skip and $limit stages from the count pipeline
   let countPipeline = [
