@@ -14,8 +14,22 @@ type returnSellerTokenPayload {
 
 type returnToSellerProductsReturn {
   sellerId: String
+  updatedAt: DateTime
   productId: String
   product: Product
+  sellerInfo: Account
+}
+type SimpleInventoryInfo {
+  productInfo: [ProductInfo]
+  sellerInfo: [Account]
+}
+
+type ProductInfo {
+  title:String
+  sellerId: String
+  media: [ImageInfo]
+  referenceId: String
+  
 }
 
 type returnToSellerProductsPayload {
@@ -135,7 +149,9 @@ type earningsBreakDownPayload {
   totalCommission: Float
   netProfit: Float
 }
-
+extend type SimpleInventoryInfo{
+  updatedAt: DateTime
+}
 type commissionDetailsPayload {
   orderId: String
   commissionFee: Float
@@ -168,6 +184,7 @@ type Query {
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
+    storeName: String
   ): returnToSellerProductsPayload
 
   # sellerUploadCount(
@@ -193,6 +210,7 @@ type Query {
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
+    storeName: String
   ): sellerUploadCountPayload
 
   uploadedProductsMonthly(
@@ -206,12 +224,17 @@ type Query {
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
+    storeName: String
+    email: String
+    contact: String
   ): sellerRegistraionMonthlyPayload
   soldProductsMonthly(
     skip: Int = 0
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
+    storeName: String
+    category: String
   ): soldProductsMonthlyPayload
   sellerPaymentsReport(
     paymentStatus: PaymentStatus
