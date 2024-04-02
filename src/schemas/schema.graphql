@@ -1,3 +1,14 @@
+extend type Account {
+  soldProduct: soldProduct
+  uploadedProduct: uploadedProduct
+}
+type soldProduct {
+  totalSoldProductCount: Int
+}
+type uploadedProduct {
+  totalUploadedProductCount: Int
+}
+
 type sellerOrderCountReturn {
   sellerId: String
   storeName: String
@@ -25,11 +36,10 @@ type SimpleInventoryInfo {
 }
 
 type ProductInfo {
-  title:String
+  title: String
   sellerId: String
   media: [ImageInfo]
   referenceId: String
-  
 }
 
 type returnToSellerProductsPayload {
@@ -149,7 +159,7 @@ type earningsBreakDownPayload {
   totalCommission: Float
   netProfit: Float
 }
-extend type SimpleInventoryInfo{
+extend type SimpleInventoryInfo {
   updatedAt: DateTime
 }
 type commissionDetailsPayload {
@@ -166,7 +176,7 @@ type ProductInsightsResponse {
   viewCount: Int
 }
 
-type buyerReferalUsage{
+type buyerReferalUsage {
   discountCode: String
   Account: Account
 }
@@ -244,7 +254,7 @@ type Query {
     endDate: DateTime
     productId: String
     storeName: String
-    productName:String
+    productName: String
   ): sellerPaymentsReportPayload
 
   # seller dashboard apis
