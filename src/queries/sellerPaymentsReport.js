@@ -1,6 +1,6 @@
 export default async function sellerPaymentsReport(parent, args, context, info) {
     console.log("sellerOrderCount query args", args);
-    let { startDate, endDate, skip, limit, paymentStatus, productId, storeName , productName} = args;
+    let { startDate, endDate, skip, limit, paymentStatus, productId, storeName , productName,  subOrderID, paymentID} = args;
     let { collections } = context;
     let { Payments, Accounts, Products } = collections; // Assuming you have a Products collection
     let match = {};
@@ -13,6 +13,12 @@ export default async function sellerPaymentsReport(parent, args, context, info) 
     }
     if (paymentStatus) {
         match['status'] = paymentStatus;
+    }
+    if (subOrderID) {
+        match['subOrderId'] = subOrderID;
+    }
+    if (paymentID) {
+        match['_id'] = paymentID;
     }
     if (productId) {
         match['productId'] = productId;
