@@ -29,6 +29,9 @@ type returnToSellerProductsReturn {
   productId: String
   product: Product
   sellerInfo: Account
+  productInfo: ProductInfo
+
+  
 }
 type SimpleInventoryInfo {
   productInfo: [ProductInfo]
@@ -40,6 +43,8 @@ type ProductInfo {
   sellerId: String
   media: [ImageInfo]
   referenceId: String
+  price: ProductPriceRange
+  
 }
 
 type returnToSellerProductsPayload {
@@ -195,6 +200,8 @@ type Query {
     startDate: DateTime
     endDate: DateTime
     storeName: String
+    productName: String
+    productID: ID
   ): returnToSellerProductsPayload
 
   # sellerUploadCount(
@@ -237,6 +244,7 @@ type Query {
     storeName: String
     email: String
     contact: String
+    promoCode:String
   ): sellerRegistraionMonthlyPayload
   soldProductsMonthly(
     skip: Int = 0
@@ -254,7 +262,9 @@ type Query {
     endDate: DateTime
     productId: String
     storeName: String
-    productName: String
+    productName:String
+    subOrderID: String
+    paymentID: String
   ): sellerPaymentsReportPayload
 
   # seller dashboard apis
