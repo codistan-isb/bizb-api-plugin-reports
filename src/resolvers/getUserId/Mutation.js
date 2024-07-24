@@ -143,7 +143,7 @@ export default {
         let responsePassword = await injector
             .get(password_1.AccountsPassword)
             .changePassword(userId, oldPassword, newPassword);
-        return null;
+        return true;
     },
 
     resetPassword: async (_, { token, newPassword }, { injector, infos, collections }) => {
