@@ -98,6 +98,7 @@ export default {
             loginResult,
         };
     },
+
     refreshTokens: async (_, args, ctx) => {
         const { accessToken, refreshToken } = args;
         const { injector, infos } = ctx;
@@ -106,28 +107,75 @@ export default {
             .refreshTokens(accessToken, refreshToken, infos);
         return refreshedSession;
     },
+
     authenticate: async (_, args, ctx) => {
         const { serviceName, params } = args;
-        const { injector, infos, collections } = ctx;
-        const { users } = collections;
+        const { injector, infos, collections, mutations, accountId } = ctx;
+        const { users, Cart } = collections;
+
+        // Logging parameters for debugging
+        console.log("params here", params);
+
         const isOldUserFirstLogin = await users.findOne({
-            "firstLogin": true,
+            firstLogin: true,
             "emails.0.address": params?.user?.email,
         });
 
-        console.log("params here", params)
+        console.log("isOldUserFirstLogin", isOldUserFirstLogin);
 
         if (isOldUserFirstLogin) {
-
             const accountsServer = injector.get(server_1.AccountsServer);
             const accountsPassword = injector.get(password_1.AccountsPassword);
             await accountsPassword.sendResetPasswordEmail(params?.user?.email);
-            throw new Error("Password update required, Check your regisetered email for reset password instructions");
+            throw new Error(
+                "Password update required. Check your registered email for reset password instructions."
+            );
         }
-
+        console.log("ABOVE THE INJECTORE")
         const authenticated = await injector
             .get(server_1.AccountsServer)
             .loginWithService(serviceName, params, infos);
+
+        console.log("AUTHENTICATE", authenticated)
+
+        if (authenticated && authenticated.user?._id) {
+            console.log(`Authenticated User ID: ${authenticated.user._id}`);
+
+            ctx.accountId = authenticated.user._id;
+
+            const existingCart = await Cart.findOne({
+                accountId: authenticated.user._id,
+            });
+
+            if (!existingCart) {
+                console.log(
+                    `No existing cart found for user ${authenticated.user._id}, creating a new one.`
+                );
+
+                try {
+                    const newCart = await mutations.createCart(ctx, {
+                        items: [],
+                        shopId: "riaaGLe2RjanTBQzw",
+                        accountId: authenticated.user._id,
+                        shouldCreateWithoutItems: true,
+                    });
+
+                    console.log("NEW CART ====", newCart);
+                    console.log(
+                        `New cart created for user ${authenticated.user._id}: ${newCart._id}`
+                    );
+                } catch (error) {
+                    console.error("Failed to create cart:", error);
+                }
+            } else {
+                console.log(
+                    `Cart already exists for user ${authenticated.user._id}: ${existingCart._id}`
+                );
+            }
+        } else {
+            console.error("Authentication failed or did not return a user ID.");
+        }
+
         return authenticated;
     },
 
@@ -145,6 +193,40 @@ export default {
             .changePassword(userId, oldPassword, newPassword);
         return null;
     },
+
+    setPassword: async (_, { userId, newPassword }, { injector, collections }) => {
+        // Ensure both userId and newPassword are provided
+
+        const { users } = collections
+
+        if (!userId || !newPassword) {
+            throw new Error("Both userId and newPassword must be provided");
+        }
+
+        try {
+
+            const userExists = await users.findOne({ _id: userId });
+            if (!userExists) {
+                throw new Error("User not found.");
+            }
+
+            await injector
+                .get(password_1.AccountsPassword)
+                .setPassword(userId, newPassword);
+
+            console.log("Password successfully updated for user:", userId);
+
+
+            return { message: "Password reset successfully." };
+        } catch (error) {
+            console.error("Failed to reset password:", error);
+            throw new Error(`Failed to reset password: ${error.message}`);
+        }
+    },
+
+
+
+
 
     resetPassword: async (_, { token, newPassword }, { injector, infos, collections }) => {
         let resetPasswordResponse = null;
@@ -212,35 +294,5 @@ export default {
         console.log("login Result is ", loginResult)
         return loginResult.tokens
 
-        // const isOldUserFirstLogin = await users.findOne({
-        //     "_id": userId,
-        //     //   "emails.0.address": params?.user?.email,
-        // });
-
-        // console.log("params here", isOldUserFirstLogin)
-
-        // if (isOldUserFirstLogin) {
-
-        //   const accountsServer = injector.get(server_1.AccountsServer);
-        //   const accountsPassword = injector.get(password_1.AccountsPassword);
-        //   await accountsPassword.sendResetPasswordEmail(params?.user?.email);
-        //   throw new Error("Password update required, Check your regisetered email for reset password instructions");
-        // }
-
-        // const params = {
-        //     user: {
-        //         email: isOldUserFirstLogin.emails[0].address,
-        //     },
-        //     password: hashPassword(isOldUserFirstLogin.services.password.bcrypt)
-        // }
-        // console.log("params here", params)
-
-
-        // const authenticated = await injector
-        //     .get(server_1.AccountsServer)
-        //     .loginWithService("password", params, infos);
-
-
-        // return authenticated;
     },
 };
