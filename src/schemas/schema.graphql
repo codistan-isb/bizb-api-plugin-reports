@@ -23,6 +23,23 @@ type returnSellerTokenPayload {
   refreshToken: String
 }
 
+type SoldProductsPayload {
+  totalcount: Int
+  soldProducts: [SoldProduct]
+}
+
+type SoldProduct {
+  _id: ID!
+  product: Product
+  sellerInfo: Account
+  createdAt: DateTime
+  updatedAt: DateTime
+  size: String
+  shopId: ID
+  issoldoutProduct: Int
+  inStock: Int
+}
+
 type returnToSellerProductsReturn {
   sellerId: String
   updatedAt: DateTime
@@ -30,9 +47,8 @@ type returnToSellerProductsReturn {
   product: Product
   sellerInfo: Account
   productInfo: ProductInfo
-
-  
 }
+
 type SimpleInventoryInfo {
   productInfo: [ProductInfo]
   sellerInfo: [Account]
@@ -44,7 +60,6 @@ type ProductInfo {
   media: [ImageInfo]
   referenceId: String
   price: ProductPriceRange
-  
 }
 
 type returnToSellerProductsPayload {
@@ -75,6 +90,12 @@ type sellerOrderCountPayload {
   storeName: String
   orderCount: Float
 }
+
+type Hashtag {
+  id: ID # The unique identifier for the tag
+  slug: String # The slug/name for the tag
+}
+
 type sellerUploadReturnCount {
   _id: String
   sellerLogo: String
@@ -82,6 +103,8 @@ type sellerUploadReturnCount {
   sellerEmail: String
   productCount: Float
   sellerPhone: String
+  productTitles: [String] # New field to include product titles
+  hashtags: [Hashtag]
 }
 
 type sellerUploadCountPayload {
@@ -123,6 +146,7 @@ type sellerPaymentPayload {
   itemId: String
   sellerInfo: Account
   productName: String
+  productReferenceId: String
 }
 
 type sellerSoldProductsPayload {
@@ -167,6 +191,7 @@ type earningsBreakDownPayload {
 extend type SimpleInventoryInfo {
   updatedAt: DateTime
 }
+
 type commissionDetailsPayload {
   orderId: String
   commissionFee: Float
@@ -184,6 +209,10 @@ type ProductInsightsResponse {
 type buyerReferalUsage {
   discountCode: String
   Account: Account
+}
+
+type SetPasswordResponse {
+  message: String
 }
 
 type Query {
@@ -228,6 +257,7 @@ type Query {
     startDate: DateTime
     endDate: DateTime
     storeName: String
+    hashtagIds: [ID]
   ): sellerUploadCountPayload
 
   uploadedProductsMonthly(
@@ -236,6 +266,7 @@ type Query {
     startDate: DateTime
     endDate: DateTime
   ): uploadedProductsMonthlyPayload
+
   sellerRegistraionMonthly(
     skip: Int = 0
     limit: Int = 20
@@ -244,8 +275,9 @@ type Query {
     storeName: String
     email: String
     contact: String
-    promoCode:String
+    promoCode: String
   ): sellerRegistraionMonthlyPayload
+
   soldProductsMonthly(
     skip: Int = 0
     limit: Int = 20
@@ -254,6 +286,26 @@ type Query {
     storeName: String
     category: String
   ): soldProductsMonthlyPayload
+
+  # soldProducts(
+  #   skip: Int = 0
+  #   limit: Int = 20
+  #   startDate: DateTime
+  #   endDate: DateTime
+  #   storeName: String
+  #   category: String
+  # ): soldProductsMonthlyPayload
+
+  soldProducts(
+    skip: Int = 0
+    limit: Int = 20
+    startDate: DateTime
+    endDate: DateTime
+    storeName: String
+    category: String
+    tagIds: [ID]
+  ): SoldProductsPayload
+
   sellerPaymentsReport(
     paymentStatus: PaymentStatus
     skip: Int = 0
@@ -262,7 +314,7 @@ type Query {
     endDate: DateTime
     productId: String
     storeName: String
-    productName:String
+    productName: String
     subOrderID: String
     paymentID: String
   ): sellerPaymentsReportPayload
@@ -293,4 +345,6 @@ type Query {
 
 extend type Mutation {
   getSellerToken(userId: String): returnSellerTokenPayload
+
+  setPassword(userId: ID!, newPassword: String!): SetPasswordResponse
 }
