@@ -74,14 +74,14 @@ export default async function returnToSellerProducts(
         _id: 0,
         sellerId: "$suborders.sellerId",
         productId: "$suborders.shipping.items.productId",
-        updatedAt: "$suborders.updatedAt", // Include updatedAt field
+        updatedAt: "$suborders.updatedAt",
         sellerInfo: "$sellerInfo",
-        productInfo:"$productInfo"
+        productInfo: "$productInfo"
 
       }
     },
-    { $skip: skip }, // Skip the already fetched records
-    { $limit: limit }, // Fetch the next set of results
+    { $skip: skip },
+    { $limit: limit },
   ];
 
   if (storeName) {
@@ -138,17 +138,17 @@ export default async function returnToSellerProducts(
           "sellerInfo.storeName": storeName
         }
       },
-      
+
       {
         $project: {
           _id: 0,
           sellerId: "$suborders.sellerId",
           productId: "$suborders.shipping.items.productId",
           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-          productInfo:"$productInfo",
+          productInfo: "$productInfo",
           sellerInfo: "$sellerInfo",
 
-  
+
         }
       },
 
@@ -197,7 +197,7 @@ export default async function returnToSellerProducts(
         }
       },
       { $unwind: "$sellerInfo" },
-      
+
 
       {
         $lookup: {
@@ -219,10 +219,10 @@ export default async function returnToSellerProducts(
           sellerId: "$suborders.sellerId",
           productId: "$suborders.shipping.items.productId",
           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-          productInfo:"$productInfo",
+          productInfo: "$productInfo",
           sellerInfo: "$sellerInfo",
 
-  
+
         }
       },
 
@@ -230,6 +230,9 @@ export default async function returnToSellerProducts(
       { $limit: limit }, // Fetch the next set of results
     ];
   }
+
+
+
   if (productName) {
     console.log("Applying productName filter:", productName); // Log storeName
     returnToSellerProductsPipeline = [
@@ -270,7 +273,7 @@ export default async function returnToSellerProducts(
         }
       },
       { $unwind: "$sellerInfo" },
-      
+
 
       {
         $lookup: {
@@ -292,10 +295,10 @@ export default async function returnToSellerProducts(
           sellerId: "$suborders.sellerId",
           productId: "$suborders.shipping.items.productId",
           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-          productInfo:"$productInfo",
+          productInfo: "$productInfo",
           sellerInfo: "$sellerInfo",
 
-  
+
         }
       },
 
@@ -327,4 +330,4 @@ export default async function returnToSellerProducts(
     totalcount: totalcount,
     returnToSellerProductsReturn: result,
   };
-}
+}   
