@@ -1,10 +1,10 @@
 export default async function sellerPaymentsReport(parent, args, context, info) {
     console.log("sellerOrderCount query args", args);
-    let { startDate, endDate, skip, limit, paymentStatus, productId, storeName , productName,  subOrderID, paymentID} = args;
+    let { startDate, endDate, skip, limit, paymentStatus, productId, storeName, productName, subOrderID, paymentID } = args;
     let { collections } = context;
     let { Payments, Accounts, Products } = collections; // Assuming you have a Products collection
     let match = {};
-    
+
     if (startDate && endDate) {
         match.createdAt = {
             $gte: startDate,
@@ -58,7 +58,9 @@ export default async function sellerPaymentsReport(parent, args, context, info) 
                     emails: "$sellerInfo.emails",
                     profile: "$sellerInfo.profile",
                     productId: "$productInfo._id", // Group by productId
-                    productName: "$productInfo.title" // Include product title
+                    productName: "$productInfo.title", // Include product title
+                    productReferenceId: "$productInfo.referenceId"
+
                 },
                 paymentFields: { $first: "$$ROOT" }
             },
