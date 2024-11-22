@@ -17,7 +17,7 @@ type sellerOrderCountReturn {
   sellerEmail: String
   orderCount: Float
   sellerPhone: String
-  price: Int
+  price: Float
   title: String
   status: String
   orderDate: Date
@@ -127,7 +127,7 @@ type ordersStatusReportResp {
   sellerPhone: String
   createdAt: Date
   status: String
-  price: Int
+  price: Float
 }
 
 type ordersStatusReportPayload {
