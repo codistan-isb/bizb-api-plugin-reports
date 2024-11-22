@@ -51,14 +51,20 @@ export default async function ordersStatusReport(parent, args, context, info) {
       $unwind: "$sellerInfo",
     },
     {
+      $unwind: "$payments"
+    },
+    {
       $group: {
         _id: {
+          subOrderId: "$_id",
+          createdAt: "$createdAt",
+          status: "$payments.status",
+          price: "$payments.amount",
           sellerId: "$sellerId",
           storeName: "$sellerInfo.storeName",
           sellerLogo: "$sellerInfo.storeLogo",
           sellerEmail: "$sellerInfo.emails.address",
           sellerPhone: "$sellerInfo.profile",
-
         },
         productCount: { $sum: 1 },
       },
@@ -66,13 +72,16 @@ export default async function ordersStatusReport(parent, args, context, info) {
     {
       $project: {
         _id: 0,
+        subOrderId: "$_id.subOrderId",
+        createdAt: "$_id.createdAt",
+        status: "$_id.status",
+        price: "$_id.price",
         sellerId: "$_id.sellerId",
         storeName: "$_id.storeName",
         productCount: 1,
         sellerLogo: "$_id.sellerLogo",
         sellerEmail: { $first: "$_id.sellerEmail" },
         sellerPhone: "$_id.sellerPhone.phone"
-
       },
     },
     { $skip: skip }, // Skip the already fetched records

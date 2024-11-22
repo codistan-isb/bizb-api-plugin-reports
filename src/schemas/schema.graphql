@@ -113,12 +113,16 @@ type sellerUploadCountPayload {
 }
 
 type ordersStatusReportResp {
+  subOrderId: String
   sellerId: String
   sellerLogo: String
   sellerEmail: String
   storeName: String
   productCount: Float
   sellerPhone: String
+  createdAt: Date
+  status: String
+  price: Int
 }
 
 type ordersStatusReportPayload {
