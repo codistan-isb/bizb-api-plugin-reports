@@ -10,12 +10,17 @@ type uploadedProduct {
 }
 
 type sellerOrderCountReturn {
+  subOrderID: ID
   sellerId: String
   storeName: String
   sellerLogo: String
   sellerEmail: String
   orderCount: Float
   sellerPhone: String
+  price: Int
+  title: String
+  status: String
+  orderDate: Date
 }
 
 type returnSellerTokenPayload {
@@ -225,6 +230,11 @@ type Query {
     limit: Int = 20
     startDate: DateTime
     endDate: DateTime
+    childOrderId: ID
+    storeName: ID
+    productId: String
+    productName: String
+    orderStatus: String
   ): sellerOrderCountPayload
 
   returnToSellerProducts(
