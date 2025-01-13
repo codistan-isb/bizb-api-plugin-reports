@@ -1,6 +1,7 @@
 extend type Account {
   soldProduct: soldProduct
   uploadedProduct: uploadedProduct
+  sellerPromoCode: sellerPromoCode
 }
 type soldProduct {
   totalSoldProductCount: Int
@@ -80,6 +81,12 @@ type sellerOrderCountPayload {
 type uploadedProductsMonthlyPayload {
   totalcount: Int
   product: [Product]
+}
+
+type sellerPromoCode {
+  code: String
+  type: String
+  description: String
 }
 type sellerRegistraionMonthlyPayload {
   totalcount: Int
