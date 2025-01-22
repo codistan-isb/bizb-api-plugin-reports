@@ -136,6 +136,9 @@ type ordersStatusReportResp {
   status: String
   price: Float
   sellernName: String
+  customerName: String
+  customerContact: String
+  customerEmail: String
 }
 
 type ordersStatusReportPayload {
