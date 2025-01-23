@@ -54,12 +54,18 @@ export default async function ordersStatusReport(parent, args, context, info) {
       $unwind: "$payments"
     },
     {
+      $unwind: "$shipping"
+    },
+    {
       $group: {
         _id: {
           subOrderId: "$_id",
           createdAt: "$createdAt",
+          customerEmail: "$email",
           status: "$payments.status",
           price: "$payments.amount",
+          customerName: "$shipping.address.fullName",
+          customerContact: "$shipping.address.phone",
           sellerId: "$sellerId",
           storeName: "$sellerInfo.storeName",
           sellernName: "$sellerInfo.name",
@@ -75,8 +81,11 @@ export default async function ordersStatusReport(parent, args, context, info) {
         _id: 0,
         subOrderId: "$_id.subOrderId",
         createdAt: "$_id.createdAt",
+        customerEmail: "$_id.customerEmail",
         status: "$_id.status",
         price: "$_id.price",
+        customerName: "$_id.customerName",
+        customerContact: "$_id.customerContact",
         sellerId: "$_id.sellerId",
         sellernName: "$_id.sellernName",
         storeName: "$_id.storeName",
@@ -88,6 +97,7 @@ export default async function ordersStatusReport(parent, args, context, info) {
     },
     { $skip: skip }, // Skip the already fetched records
     { $limit: limit }, // Fetch the next set of results
+
   ];
   // console.log("ordersStatusReportPipeline", ordersStatusReportPipeline);
   let countPipeline = [
