@@ -1,338 +1,3 @@
-// export default async function returnToSellerProducts(
-//   parent,
-//   args,
-//   context,
-//   info
-// ) {
-//   // console.log("sellerOrderCount query args", args);
-//   let { startDate, endDate, skip, limit, storeName, productName, productID } = args;
-//   let { collections } = context;
-//   let { SubOrders, Products } = collections;
-
-//   let match = {};
-//   if (startDate && endDate) {
-//     match.createdAt = {
-//       $gte: startDate,
-//       $lte: endDate,
-//     };
-//   }
-//   match["shipping.items.workflow.status"] = "New"
-//     .toLowerCase()
-//     .replace(/_/g, "");
-
-
-
-//   let returnToSellerProductsPipeline = [
-
-//     {
-//       $match: match,
-//     },
-//     {
-//       $lookup: {
-//         from: "SubOrders",
-//         localField: "_id",
-//         foreignField: "_id",
-//         as: "suborders"
-//       }
-//     },
-//     {
-//       $unwind: "$suborders"
-//     },
-//     {
-//       $unwind: "$suborders.shipping"
-//     },
-//     {
-//       $unwind: "$suborders.shipping.items"
-//     },
-//     {
-//       $match: {
-//         "suborders.shipping.items.productId": {
-//           $exists: true
-//         }
-//       }
-//     },
-//     {
-//       $lookup: {
-//         from: 'Accounts',
-//         localField: 'suborders.sellerId',
-//         foreignField: '_id',
-//         as: 'sellerInfo'
-//       }
-//     },
-//     { $unwind: "$sellerInfo" },
-//     {
-//       $lookup: {
-//         from: 'Products',
-//         localField: 'suborders.shipping.items.productId',
-//         foreignField: '_id',
-//         as: 'productInfo'
-//       }
-//     },
-//     { $unwind: "$productInfo" },
-//     {
-//       $project: {
-//         _id: 0,
-//         sellerId: "$suborders.sellerId",
-//         productId: "$suborders.shipping.items.productId",
-//         updatedAt: "$suborders.updatedAt",
-//         sellerInfo: "$sellerInfo",
-//         productInfo: "$productInfo"
-
-//       }
-//     },
-//     { $skip: skip },
-//     { $limit: limit },
-//   ];
-
-//   if (storeName) {
-//     console.log("Applying storeName filter:", storeName); // Log storeName
-//     returnToSellerProductsPipeline = [
-
-//       {
-//         $match: match,
-//       },
-//       {
-//         $lookup: {
-//           from: "SubOrders",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "suborders"
-//         }
-//       },
-//       {
-//         $unwind: "$suborders"
-//       },
-//       {
-//         $unwind: "$suborders.shipping"
-//       },
-//       {
-//         $unwind: "$suborders.shipping.items"
-//       },
-//       {
-//         $match: {
-//           "suborders.shipping.items.productId": {
-//             $exists: true
-//           }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'Products',
-//           localField: 'suborders.shipping.items.productId',
-//           foreignField: '_id',
-//           as: 'productInfo'
-//         }
-//       },
-//       { $unwind: "$productInfo" },
-//       {
-//         $lookup: {
-//           from: 'Accounts',
-//           localField: 'suborders.sellerId',
-//           foreignField: '_id',
-//           as: 'sellerInfo'
-//         }
-//       },
-//       { $unwind: "$sellerInfo" },
-//       {
-//         $match: {
-//           "sellerInfo.storeName": storeName
-//         }
-//       },
-
-//       {
-//         $project: {
-//           _id: 0,
-//           sellerId: "$suborders.sellerId",
-//           productId: "$suborders.shipping.items.productId",
-//           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-//           productInfo: "$productInfo",
-//           sellerInfo: "$sellerInfo",
-
-
-//         }
-//       },
-
-//       { $skip: skip }, // Skip the already fetched records
-//       { $limit: limit }, // Fetch the next set of results
-//     ];
-//   }
-
-//   if (productID) {
-//     console.log("Applying productID filter:", productID); // Log storeName
-//     returnToSellerProductsPipeline = [
-
-//       {
-//         $match: match,
-//       },
-//       {
-//         $lookup: {
-//           from: "SubOrders",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "suborders"
-//         }
-//       },
-//       {
-//         $unwind: "$suborders"
-//       },
-//       {
-//         $unwind: "$suborders.shipping"
-//       },
-//       {
-//         $unwind: "$suborders.shipping.items"
-//       },
-//       {
-//         $match: {
-//           "suborders.shipping.items.productId": {
-//             $exists: true
-//           }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'Accounts',
-//           localField: 'suborders.sellerId',
-//           foreignField: '_id',
-//           as: 'sellerInfo'
-//         }
-//       },
-//       { $unwind: "$sellerInfo" },
-
-
-//       {
-//         $lookup: {
-//           from: 'Products',
-//           localField: 'suborders.shipping.items.productId',
-//           foreignField: '_id',
-//           as: 'productInfo'
-//         }
-//       },
-//       { $unwind: "$productInfo" },
-//       {
-//         $match: {
-//           "productInfo._id": productID
-//         }
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           sellerId: "$suborders.sellerId",
-//           productId: "$suborders.shipping.items.productId",
-//           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-//           productInfo: "$productInfo",
-//           sellerInfo: "$sellerInfo",
-
-
-//         }
-//       },
-
-//       { $skip: skip }, // Skip the already fetched records
-//       { $limit: limit }, // Fetch the next set of results
-//     ];
-//   }
-
-
-
-//   if (productName) {
-//     console.log("Applying productName filter:", productName); // Log storeName
-//     returnToSellerProductsPipeline = [
-
-//       {
-//         $match: match,
-//       },
-//       {
-//         $lookup: {
-//           from: "SubOrders",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "suborders"
-//         }
-//       },
-//       {
-//         $unwind: "$suborders"
-//       },
-//       {
-//         $unwind: "$suborders.shipping"
-//       },
-//       {
-//         $unwind: "$suborders.shipping.items"
-//       },
-//       {
-//         $match: {
-//           "suborders.shipping.items.productId": {
-//             $exists: true
-//           }
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'Accounts',
-//           localField: 'suborders.sellerId',
-//           foreignField: '_id',
-//           as: 'sellerInfo'
-//         }
-//       },
-//       { $unwind: "$sellerInfo" },
-
-
-//       {
-//         $lookup: {
-//           from: 'Products',
-//           localField: 'suborders.shipping.items.productId',
-//           foreignField: '_id',
-//           as: 'productInfo'
-//         }
-//       },
-//       { $unwind: "$productInfo" },
-//       {
-//         $match: {
-//           "productInfo.title": productName
-//         }
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           sellerId: "$suborders.sellerId",
-//           productId: "$suborders.shipping.items.productId",
-//           updatedAt: "$suborders.updatedAt", // Include updatedAt field
-//           productInfo: "$productInfo",
-//           sellerInfo: "$sellerInfo",
-
-
-//         }
-//       },
-
-//       { $skip: skip }, // Skip the already fetched records
-//       { $limit: limit }, // Fetch the next set of results
-//     ];
-//   }
-
-
-
-//   let result = await SubOrders.aggregate(returnToSellerProductsPipeline).toArray();
-
-
-//   let countPipeline = [
-//     ...returnToSellerProductsPipeline.slice(0, -2), // Remove last two stages ($skip and $limit)
-//     { $count: "totalcount" },
-//   ];
-
-//   let countResult = await SubOrders.aggregate(countPipeline).toArray();
-//   let totalcount = countResult.length > 0 ? countResult[0].totalcount : 0;
-
-
-//   console.log("Products:", result);
-
-
-
-
-//   return {
-//     totalcount: totalcount,
-//     returnToSellerProductsReturn: result,
-//   };
-// }   
-
-
 export default async function returnToSellerProducts(
   parent,
   args,
@@ -341,7 +6,7 @@ export default async function returnToSellerProducts(
 ) {
   let { startDate, endDate, skip, limit, storeName, productName, productID, referenceId } = args;
   let { collections } = context;
-  let { SubOrders, Products } = collections;
+  let { SubOrders } = collections;
 
   let match = {};
   if (startDate && endDate) {
@@ -350,11 +15,9 @@ export default async function returnToSellerProducts(
       $lte: endDate,
     };
   }
-  match["shipping.items.workflow.status"] = "New"
-    .toLowerCase()
-    .replace(/_/g, "");
+  match["shipping.items.workflow.status"] = "New".toLowerCase().replace(/_/g, "");
 
-  let returnToSellerProductsPipeline = [
+  let basePipeline = [
     {
       $match: match,
     },
@@ -394,6 +57,46 @@ export default async function returnToSellerProducts(
       },
     },
     { $unwind: "$productInfo" },
+  ];
+
+  let filterStages = [];
+
+  if (storeName) {
+    filterStages.push({
+      $match: {
+        "sellerInfo.storeName": storeName,
+      },
+    });
+  }
+
+  if (productID) {
+    filterStages.push({
+      $match: {
+        "productInfo._id": productID,
+      },
+    });
+  }
+
+  if (productName) {
+    filterStages.push({
+      $match: {
+        "productInfo.title": productName,
+      },
+    });
+  }
+
+  if (referenceId) {
+    console.log("Applying referenceId filter:", referenceId);
+    filterStages.push({
+      $match: {
+        "productInfo.referenceId": referenceId,
+      },
+    });
+  }
+
+  let returnToSellerProductsPipeline = [
+    ...basePipeline,
+    ...filterStages,
     {
       $project: {
         _id: 0,
@@ -408,57 +111,9 @@ export default async function returnToSellerProducts(
     { $limit: limit },
   ];
 
-  if (storeName) {
-    returnToSellerProductsPipeline = [
-      ...returnToSellerProductsPipeline,
-      {
-        $match: {
-          "sellerInfo.storeName": storeName,
-        },
-      },
-    ];
-  }
-
-  if (productID) {
-    returnToSellerProductsPipeline = [
-      ...returnToSellerProductsPipeline,
-      {
-        $match: {
-          "productInfo._id": productID,
-        },
-      },
-    ];
-  }
-
-  if (productName) {
-    returnToSellerProductsPipeline = [
-      ...returnToSellerProductsPipeline,
-      {
-        $match: {
-          "productInfo.title": productName,
-        },
-      },
-    ];
-  }
-
-  if (referenceId) {
-    console.log("Applying referenceId filter:", referenceId);
-    returnToSellerProductsPipeline = [
-      ...returnToSellerProductsPipeline,
-      {
-        $match: {
-          "productInfo.referenceId": referenceId,
-        },
-      },
-    ];
-  }
+  let countPipeline = [...basePipeline, ...filterStages, { $count: "totalcount" }];
 
   let result = await SubOrders.aggregate(returnToSellerProductsPipeline).toArray();
-
-  let countPipeline = [
-    ...returnToSellerProductsPipeline.slice(0, -2), // Remove last two stages ($skip and $limit)
-    { $count: "totalcount" },
-  ];
 
   let countResult = await SubOrders.aggregate(countPipeline).toArray();
   let totalcount = countResult.length > 0 ? countResult[0].totalcount : 0;
