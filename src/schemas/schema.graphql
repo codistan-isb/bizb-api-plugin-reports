@@ -255,9 +255,7 @@ type Query {
     endDate: DateTime
     storeName: String
     productName: String
-    productID: ID
-
-    referenceId: String
+    productID: String
   ): returnToSellerProductsPayload
 
   # sellerUploadCount(

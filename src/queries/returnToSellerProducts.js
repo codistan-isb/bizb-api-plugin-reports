@@ -64,7 +64,7 @@ export default async function returnToSellerProducts(
   if (storeName) {
     filterStages.push({
       $match: {
-        "sellerInfo.storeName": storeName,
+        "sellerInfo.storeName": { $regex: storeName, $options: "i" },
       },
     });
   }
@@ -72,7 +72,7 @@ export default async function returnToSellerProducts(
   if (productID) {
     filterStages.push({
       $match: {
-        "productInfo._id": productID,
+        "productInfo.referenceId": productID,
       },
     });
   }
@@ -80,16 +80,7 @@ export default async function returnToSellerProducts(
   if (productName) {
     filterStages.push({
       $match: {
-        "productInfo.title": productName,
-      },
-    });
-  }
-
-  if (referenceId) {
-    console.log("Applying referenceId filter:", referenceId);
-    filterStages.push({
-      $match: {
-        "productInfo.referenceId": referenceId,
+        "productInfo.title": { $regex: productName, $options: "i" },
       },
     });
   }
