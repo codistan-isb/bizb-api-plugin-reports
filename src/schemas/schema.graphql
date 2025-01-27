@@ -22,6 +22,9 @@ type sellerOrderCountReturn {
   title: String
   status: String
   orderDate: Date
+  childOrderId: String
+  productId: String
+  productInfo: ProductInfo
 }
 
 type returnSellerTokenPayload {
