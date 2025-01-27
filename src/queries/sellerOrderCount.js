@@ -1,4 +1,3 @@
-
 export default async function sellerOrderCount(parent, args, context, info) {
     let { startDate, endDate, skip, limit, childOrderId, storeName, productId, productName, orderStatus } = args;
     let { collections } = context;
@@ -14,7 +13,13 @@ export default async function sellerOrderCount(parent, args, context, info) {
         ...(childOrderId && { "internalOrderId": childOrderId }),
         ...(storeName && { "sellerId": storeName }),
         ...(orderStatus && { "payments.status": orderStatus }),
-        ...(productId || productName ? { "shipping.items": { $elemMatch: { ...(productName && { "title": productName }) } } } : {})
+        ...(productName && {
+            "shipping.items": {
+                $elemMatch: {
+                    "title": { $regex: productName, $options: 'i' }
+                }
+            }
+        })
     };
 
     let sellerOrderCountPipeline = [
@@ -52,6 +57,7 @@ export default async function sellerOrderCount(parent, args, context, info) {
                     price: "$payments.amount",
                     status: "$payments.status",
                     prodTitle: "$shipping.items.title",
+                    productId: "$shipping.items.productId",
                     sellerId: "$sellerId",
                     storeName: "$sellerInfo.storeName",
                     sellerLogo: "$sellerInfo.storeLogo",
@@ -69,7 +75,8 @@ export default async function sellerOrderCount(parent, args, context, info) {
                 orderDate: "$_id.orderDate",
                 price: "$_id.price",
                 status: "$_id.status",
-                prodTitle: "$_id.prodTitle",
+                title: "$_id.prodTitle",
+                productId: "$_id.productId",
                 sellerId: "$_id.sellerId",
                 sellerLogo: "$_id.sellerLogo",
                 sellerEmail: { $first: "$_id.sellerEmail" },
@@ -86,17 +93,18 @@ export default async function sellerOrderCount(parent, args, context, info) {
                 as: "productInfo"
             }
         },
-        { $unwind: "$productInfo" },
-
-        // ADD FILTER ON THE PRODUCT TABLE ON THE BASIS OF THE REFERENCES
+        {
+            $unwind: {
+                path: "$productInfo",
+                preserveNullAndEmptyArrays: true // This ensures that records without matching products are not filtered out
+            }
+        },
+        // Conditional filter based on productId, only if provided
         ...(productId ? [{ $match: { "productInfo.referenceId": productId } }] : []),
 
         { $skip: skip },
         { $limit: limit } // Fetch the next set of results
     ];
-
-
-
 
     let countPipeline = [
         ...sellerOrderCountPipeline.slice(0, -2), // Remove last two stages ($skip and $limit)
