@@ -1,6 +1,6 @@
 export default async function ordersStatusReport(parent, args, context, info) {
   // console.log("sellerOrderCount query args", args);
-  let { startDate, endDate, skip, limit, orderStatus, byStores, byProduct, byStoreName } =
+  let { startDate, endDate, skip, limit, orderStatus, byStores, byProduct, byStoreName, customerName, customerContact, productTitile } =
     args;
   let { collections } = context;
   let { SubOrders } = collections;
@@ -24,6 +24,18 @@ export default async function ordersStatusReport(parent, args, context, info) {
   }
   if (byStoreName) {
     match["shipping.items.productVendor"] = byStoreName;
+  }
+
+  if (customerName) {
+    match["shipping.address.fullName"] = customerName;
+  }
+
+  if (customerContact) {
+    match["shipping.address.phone"] = customerContact
+  }
+
+  if (productTitile) {
+    match["shipping.items.title"] = productTitile
   }
   console.log("match", match);
   let ordersStatusReportPipeline = [
@@ -56,6 +68,7 @@ export default async function ordersStatusReport(parent, args, context, info) {
     {
       $unwind: "$shipping"
     },
+    { $unwind: "$shipping.items" },
     {
       $group: {
         _id: {
@@ -66,6 +79,7 @@ export default async function ordersStatusReport(parent, args, context, info) {
           price: "$payments.amount",
           customerName: "$shipping.address.fullName",
           customerContact: "$shipping.address.phone",
+          title: "$shipping.items.title",
           sellerId: "$sellerId",
           storeName: "$sellerInfo.storeName",
           sellernName: "$sellerInfo.name",
@@ -86,6 +100,7 @@ export default async function ordersStatusReport(parent, args, context, info) {
         price: "$_id.price",
         customerName: "$_id.customerName",
         customerContact: "$_id.customerContact",
+        productTitile: "$_id.title",
         sellerId: "$_id.sellerId",
         sellernName: "$_id.sellernName",
         storeName: "$_id.storeName",
@@ -95,11 +110,11 @@ export default async function ordersStatusReport(parent, args, context, info) {
         sellerPhone: "$_id.sellerPhone.phone"
       },
     },
-    { $skip: skip }, // Skip the already fetched records
-    { $limit: limit }, // Fetch the next set of results
+    { $skip: skip },
+    { $limit: limit },
 
   ];
-  // console.log("ordersStatusReportPipeline", ordersStatusReportPipeline);
+
   let countPipeline = [
     ...ordersStatusReportPipeline.slice(0, -2), // Remove last two stages ($skip and $limit)
     { $count: "totalcount" },
