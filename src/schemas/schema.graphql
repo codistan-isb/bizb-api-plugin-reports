@@ -134,6 +134,7 @@ type ordersStatusReportResp {
   sellerEmail: String
   storeName: String
   productCount: Float
+  productTitile: String
   sellerPhone: String
   createdAt: Date
   status: String
@@ -277,6 +278,9 @@ type Query {
     byStores: String
     byProduct: String
     byStoreName: String
+    customerName: String
+    customerContact: String
+    productTitile: String
   ): ordersStatusReportPayload
 
   sellerUploadCount(
