@@ -308,6 +308,7 @@ type Query {
     email: String
     contact: String
     promoCode: String
+    city: String
   ): sellerRegistraionMonthlyPayload
 
   soldProductsMonthly(

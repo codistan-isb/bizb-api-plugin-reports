@@ -2,7 +2,7 @@ import pkg from 'mongodb';
 const { ObjectId } = pkg;
 
 export default async function sellerRegistrationMonthly(parent, args, context, info) {
-    const { startDate, endDate, skip, limit, storeName, email, contact, promoCode } = args;
+    const { startDate, endDate, skip, limit, storeName, email, contact, promoCode, city } = args;
     const { collections } = context;
     const { Accounts, SellerDiscounts } = collections;
 
@@ -23,8 +23,13 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
         query['contactNumber'] = contact;
     }
 
+    if (city) {
+        query['billing.city'] = { $regex: new RegExp(city, 'i') };
+    }
+    console.log("CITY query", city)
+
     // Apply date range filter only if none of the prioritizeFields are provided
-    if (!prioritizeFields && (startDate || endDate)) {
+    if (prioritizeFields && (startDate || endDate)) {
         query['createdAt'] = {};
         if (startDate) {
             query['createdAt']['$gte'] = new Date(startDate);
@@ -33,6 +38,24 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
             query['createdAt']['$lte'] = new Date(endDate);
         }
     }
+
+    // if (startDate || endDate) {
+    //     query['createdAt'] = {};
+    //     if (startDate) {
+    //         try {
+    //             query['createdAt']['$gte'] = new Date(startDate);
+    //         } catch (error) {
+    //             console.error('Invalid start date format:', startDate);
+    //         }
+    //     }
+    //     if (endDate) {
+    //         try {
+    //             query['createdAt']['$lte'] = new Date(endDate);
+    //         } catch (error) {
+    //             console.error('Invalid end date format:', endDate);
+    //         }
+    //     }
+    // }
 
     if (promoCode) {
         console.log("PROMO CODE: " + promoCode);
