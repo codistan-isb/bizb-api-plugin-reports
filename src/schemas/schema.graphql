@@ -2,9 +2,15 @@ extend type Account {
   soldProduct: soldProduct
   uploadedProduct: uploadedProduct
   sellerPromoCode: sellerPromoCode
+  billing: sellerBilling
 }
+
 type soldProduct {
   totalSoldProductCount: Int
+}
+
+type sellerBilling {
+  city: String
 }
 type uploadedProduct {
   totalUploadedProductCount: Int
