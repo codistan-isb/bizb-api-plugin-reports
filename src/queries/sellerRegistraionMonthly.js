@@ -10,26 +10,25 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
     let query = {};
 
     // Check if user provided email, storeName, or contact
-    const prioritizeFields = !!(email || storeName || contact);
+    // const prioritizeFields = !!(email || storeName || contact);
 
     // Apply filters based on provided arguments
     if (storeName) {
-        query['storeName'] = storeName;
+        query['storeName'] = { $regex: new RegExp(storeName, 'i') };
     }
     if (email) {
-        query['emails.address'] = email;
+        query['emails.address'] = { $regex: new RegExp(email, 'i') };
     }
     if (contact) {
-        query['contactNumber'] = contact;
+        query['profile.phone'] = contact;
     }
 
     if (city) {
         query['billing.city'] = { $regex: new RegExp(city, 'i') };
     }
-    console.log("CITY query", city)
 
     // Apply date range filter only if none of the prioritizeFields are provided
-    if (prioritizeFields && (startDate || endDate)) {
+    if ((startDate || endDate)) {
         query['createdAt'] = {};
         if (startDate) {
             query['createdAt']['$gte'] = new Date(startDate);
@@ -38,25 +37,6 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
             query['createdAt']['$lte'] = new Date(endDate);
         }
     }
-
-    // if (startDate || endDate) {
-    //     query['createdAt'] = {};
-    //     if (startDate) {
-    //         try {
-    //             query['createdAt']['$gte'] = new Date(startDate);
-    //         } catch (error) {
-    //             console.error('Invalid start date format:', startDate);
-    //         }
-    //     }
-    //     if (endDate) {
-    //         try {
-    //             query['createdAt']['$lte'] = new Date(endDate);
-    //         } catch (error) {
-    //             console.error('Invalid end date format:', endDate);
-    //         }
-    //     }
-    // }
-
     if (promoCode) {
         console.log("PROMO CODE: " + promoCode);
         // Find the seller with the given promo code
@@ -86,6 +66,8 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
 
     // Fetch the sellers with pagination
     const sellerRegistrationMonthly = await Accounts.find(query).skip(skip).limit(limit).toArray();
+
+    console.log("sellerRegistrationMonthly", sellerRegistrationMonthly);
 
     // Map through the sellers to fetch the referral code for each seller
     const sellerWithReferralCode = await Promise.all(
