@@ -24,7 +24,7 @@ export default async function sellerRegistrationMonthly(parent, args, context, i
     }
 
     if (city) {
-        query['billing.city'] = { $regex: new RegExp(city, 'i') };
+        query['storeAddress.city'] = { $regex: new RegExp(city, 'i') };
     }
 
     // Apply date range filter only if none of the prioritizeFields are provided
