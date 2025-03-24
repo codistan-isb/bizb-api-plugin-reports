@@ -374,7 +374,10 @@ type Query {
   currentSellerSales: Float
 
   #buyer side api
-  sellerSoldProducts(userId: String): sellerSoldProductsPayload
+  sellerSoldProducts(
+    userId: String
+    storeNameSearch: String
+  ): sellerSoldProductsPayload
   sellerListedProduct: sellerListingPayload
   sellerEarningBreakDown: earningsBreakDownPayload
   commissionDetails: CommissionDetailsResponse
