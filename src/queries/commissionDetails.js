@@ -16,6 +16,8 @@ export default async function commissionDetails(parent, args, context, info) {
   const commissionDetails = currentSellerEarnings.map((doc) => {
     return {
       orderId: doc.orderId,
+      referenceId: doc.referenceId,
+      internalOrderId: doc.internalOrderId,
       commissionFee: doc.fee,
       netProfit: doc.amount,
     };
