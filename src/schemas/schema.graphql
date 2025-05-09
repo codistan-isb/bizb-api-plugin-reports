@@ -224,6 +224,8 @@ extend type SimpleInventoryInfo {
 
 type commissionDetailsPayload {
   orderId: String
+  referenceId: String
+  internalOrderId: String
   commissionFee: Float
   netProfit: Float
 }
