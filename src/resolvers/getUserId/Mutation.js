@@ -191,7 +191,7 @@ export default {
         let responsePassword = await injector
             .get(password_1.AccountsPassword)
             .changePassword(userId, oldPassword, newPassword);
-        return null;
+        return true;
     },
 
     setPassword: async (_, { userId, newPassword }, { injector, collections }) => {
